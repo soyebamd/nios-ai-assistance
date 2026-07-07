@@ -2,6 +2,14 @@ import OpenAI from "openai";
 
 import * as pdfjsLib from "pdfjs-dist";
 
+//nst AIKEY = new HfInference(import.meta.env.VITE_API_HF_KEY);
+
+//import { HfInference } from "@huggingface/inference";
+
+//use with AIKEY huggin face
+
+//const response = await AIKEY.chatCompletion({
+
 // Required
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -68,9 +76,19 @@ Rules:
       model: import.meta.env.VITE_API_MODEL,
       messages: message,
       max_tokens: 500,
+      stream: true,
     });
 
-    return response.choices[0].message.content;
+    for await (const chunk of response) {
+      // console.log(JSON.stringify(chunk, null, 2));
+      // return response.choices[0].message.content;
+
+      console.log("Chunk:", chunk.choices[0].delta.content);
+      chunk.choices[0].delta.content &&
+        (text += chunk.choices[0].delta.content);
+    }
+
+    return text;
   } catch (error) {
     return "Latest error: " + error;
   }

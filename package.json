@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@huggingface/inference": "^4.13.22",
+    "dompurify": "^3.4.11",
+    "jsdom": "^29.1.1",
+    "marked": "^18.0.5",
     "openai": "^6.45.0",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^6.1.200",

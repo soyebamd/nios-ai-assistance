@@ -6,6 +6,8 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 
 import ReactMarkdown from "react-markdown";
+import DOMPurify from "dompurify";
+import { marked } from "marked";
 import GetResponse from "./ai-response";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
@@ -28,6 +30,17 @@ function App() {
     }
   }
 
+  // add security with Dompurify
+
+  const html = marked.parse(inputPrompt || "", {
+    gfm: true,
+    breaks: true,
+  });
+
+  // format text
+
+  const sanitizedHTML = DOMPurify.sanitize(html);
+
   return (
     <>
       {" "}
@@ -47,7 +60,7 @@ function App() {
           {loading ? (
             <p>....Loading</p>
           ) : (
-            <ReactMarkdown>{inputPrompt}</ReactMarkdown>
+            <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />
           )}
         </section>
 
